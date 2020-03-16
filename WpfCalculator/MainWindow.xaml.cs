@@ -23,7 +23,7 @@ namespace WpfCalculator
             InitializeComponent();
             lbl.Content = 0;
         }
-        private void PlusClick(object sender, RoutedEventArgs e)
+        public void PlusClick(object sender, RoutedEventArgs e)
         {
             TextBox box = new TextBox();
             {
@@ -32,6 +32,10 @@ namespace WpfCalculator
             box.TextChanged += Text_Changed;
             myStackPanel.Children.Add(box);
             indentation += 1;
+            //Button delete = new Button();
+            //{
+            //    Clic
+            //}
         }
         private void Text_Changed(object sender, RoutedEventArgs e)
         {
@@ -40,8 +44,16 @@ namespace WpfCalculator
             {
                 if (item is TextBox textInBox)
                 {
-                    if(int.TryParse(textInBox.Text, out var number))
+                    try
+                    {
+                        int number = int.Parse(textInBox.Text);
                         result += number;
+                    }
+                    catch
+                    {
+                        if (textInBox.Text == "") { }
+                        else MessageBox.Show("Input normal number");
+                    }
                 }
             }
             lbl.Content = result;
