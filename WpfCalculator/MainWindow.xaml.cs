@@ -17,32 +17,31 @@ namespace WpfCalculator
 {
     public partial class MainWindow : Window
     {
+        int indentation = 5;
         public MainWindow()
         {
             InitializeComponent();
             lbl.Content = 0;
         }
-
         private void PlusClick(object sender, RoutedEventArgs e)
         {
             TextBox box = new TextBox();
+            {
+                Margin = new Thickness(5, indentation, 5, 5);
+            }
             box.TextChanged += Text_Changed;
-            myGrid.Children.Add(box);
-            box.Width = 100;
-            box.Height = 50;
+            myStackPanel.Children.Add(box);
+            indentation += 1;
         }
         private void Text_Changed(object sender, RoutedEventArgs e)
         {
             int result = 0;
-            foreach (var item in myGrid.Children)
+            foreach (var item in myStackPanel.Children)
             {
                 if (item is TextBox textInBox)
                 {
-                    if
-                        (int.TryParse(textInBox.Text, out var number)) ;
-                    else 
-                        MessageBox.Show("Input normal number");
-                    result += number;
+                    if(int.TryParse(textInBox.Text, out var number))
+                        result += number;
                 }
             }
             lbl.Content = result;
