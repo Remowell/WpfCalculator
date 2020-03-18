@@ -26,23 +26,27 @@ namespace WpfCalculator
         }
         public void PlusClick(object sender, RoutedEventArgs e)
         {
+            StackPanel newStack = new StackPanel()
+            {
+                Name = "newStack" + count
+            };
+            myStackPanel.Children.Add(newStack);
+
             TextBox box = new TextBox();
             {
-                Name = "box" + count;
                 Margin = new Thickness(5, indentation, 5, 5);
             }
             box.TextChanged += Text_Changed;
-            myStackPanel.Children.Add(box);
+            newStack.Children.Add(box);
             indentation += 1;
 
             Button delete = new Button()
             {
                 Content = "Delete",
                 Name = "delete" + count,
-                FontSize = 20,
             };
             delete.Click += Delete_Click;
-            myStackPanel.Children.Add(delete);
+            newStack.Children.Add(delete);
             count++;
         }
         private void Text_Changed(object sender, RoutedEventArgs e)
@@ -50,17 +54,23 @@ namespace WpfCalculator
             int result = 0;
             foreach (var item in myStackPanel.Children)
             {
-                if (item is TextBox textInBox)
+                if (item is StackPanel stackPanel)
                 {
-                    try
+                    foreach (var element in stackPanel.Children)
                     {
-                        int number = int.Parse(textInBox.Text);
-                        result += number;
-                    }
-                    catch
-                    {
-                        if (textInBox.Text == "") { }
-                        else MessageBox.Show("Input normal number");
+                        if (element is TextBox textInBox)
+                        {
+                            try
+                            {
+                                int number = int.Parse(textInBox.Text);
+                                result += number;
+                            }
+                            catch
+                            {
+                                if (textInBox.Text == "") { }
+                                else MessageBox.Show("Input normal number");
+                            }
+                        }
                     }
                 }
             }
@@ -69,15 +79,13 @@ namespace WpfCalculator
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             Button delete = (Button)sender;
-            string deleteName = delete.Name.Substring(6);
             foreach (object element in myStackPanel.Children)
             {
-                if (element is TextBox box)
+                if (element is StackPanel stackPanel)
                 {
-                    if (box.Name.Substring(3).Equals(deleteName))
+                    if (delete.Name.Substring(6) == stackPanel.Name.Substring(8))
                     {
-                        myStackPanel.Children.Remove(box);
-                        myStackPanel.Children.Remove(delete);
+                        myStackPanel.Children.Remove(stackPanel);
                         break;
                     }
                 }
