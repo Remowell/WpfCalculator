@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:WpfCalculator"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel x:Name="myStackPanel">
-        <Button Content="Plus" FontSize="20" Click="PlusClick"/>
-        <Label x:Name="lbl" FontSize="20" Height="35"/>
-    </StackPanel>
+    <Grid x:Name="myGrid">
+        <Button Content="Plus" FontSize="20" Height="35" VerticalAlignment="Top" Click="PlusClick"/>
+        <Label x:Name="lbl" FontSize="20" VerticalAlignment="Top" Margin="0,35,0,0" Height="35"/>
+        <StackPanel x:Name="myStackPanel" Margin="0,70,0,0"/>
+    </Grid>
 </Window>
