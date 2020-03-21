@@ -20,11 +20,13 @@ namespace WpfCalculator
     {
         public int indentation = 5;
         public int count = 0;
+        public int number;
         public MainWindow()
         {
             InitializeComponent();
             lbl.Content = 0;
         }
+
         public void PlusClick(object sender, RoutedEventArgs e)
         {
             StackPanel newStack = new StackPanel()
@@ -32,14 +34,6 @@ namespace WpfCalculator
                 Name = "newStack" + count
             };
             myStackPanel.Children.Add(newStack);
-
-            TextBox box = new TextBox();
-            {
-                Margin = new Thickness(5, indentation, 5, 5);
-            }
-            box.TextChanged += Text_Changed;
-            newStack.Children.Add(box);
-            indentation += 1;
 
             ComboBox comboBox = new ComboBox();
             newStack.Children.Add(comboBox);
@@ -51,6 +45,14 @@ namespace WpfCalculator
             operations.Add("/");
             comboBox.ItemsSource = operations;
 
+            TextBox box = new TextBox();
+            {
+                Margin = new Thickness(5, indentation, 5, 5);
+            }
+            box.TextChanged += Text_Changed;
+            newStack.Children.Add(box);
+            indentation += 1;
+
             Button delete = new Button()
             {
                 Content = "Delete",
@@ -60,6 +62,7 @@ namespace WpfCalculator
             newStack.Children.Add(delete);
             count++;
         }
+
         private void Text_Changed(object sender, RoutedEventArgs e)
         {
             int result = 0;
@@ -69,17 +72,34 @@ namespace WpfCalculator
                 {
                     foreach (var element in stackPanel.Children)
                     {
-                        if (element is TextBox textInBox)
+                        if (element is TextBox textBox)
                         {
                             try
                             {
-                                int number = int.Parse(textInBox.Text);
-                                result += number;
+                                number = int.Parse(textBox.Text);
                             }
                             catch
                             {
-                                if (textInBox.Text == "") { }
+                                if (textBox.Text == "") { }
                                 else MessageBox.Show("Input normal number");
+                            }
+                        }
+                        if (element is ComboBox comboBox)
+                        {
+                            switch (comboBox.SelectedItem)
+                            {
+                                case "+":
+                                    result += number;
+                                    break;
+                                case "-":
+                                    result -= number;
+                                    break;
+                                case "*":
+                                    result *= number;
+                                    break;
+                                case "/":
+                                    result /= number;
+                                    break;
                             }
                         }
                     }
@@ -87,6 +107,7 @@ namespace WpfCalculator
             }
             lbl.Content = result;
         }
+
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             Button delete = (Button)sender;
