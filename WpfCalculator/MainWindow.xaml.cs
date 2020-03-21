@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,16 @@ namespace WpfCalculator
             box.TextChanged += Text_Changed;
             newStack.Children.Add(box);
             indentation += 1;
+
+            ComboBox comboBox = new ComboBox();
+            newStack.Children.Add(comboBox);
+
+            ObservableCollection<string> operations = new ObservableCollection<string>();
+            operations.Add("+");
+            operations.Add("-");
+            operations.Add("*");
+            operations.Add("/");
+            comboBox.ItemsSource = operations;
 
             Button delete = new Button()
             {
