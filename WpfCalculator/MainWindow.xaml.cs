@@ -62,50 +62,43 @@ namespace WpfCalculator
             newStack.Children.Add(delete);
             count++;
         }
-
+        int result = 0;
         private void Text_Changed(object sender, RoutedEventArgs e)
-        {
-            int result = 0;
+        { 
             foreach (var item in myStackPanel.Children)
             {
                 if (item is StackPanel stackPanel)
                 {
-                    foreach (var element in stackPanel.Children)
+                    TextBox textBox = FindTextBox(stackPanel);
+                    ComboBox comboBox = FindComboBox(stackPanel);
+                    try
                     {
-                        if (element is TextBox textBox)
-                        {
-                            try
-                            {
-                                number = int.Parse(textBox.Text);
-                            }
-                            catch
-                            {
-                                if (textBox.Text == "") { }
-                                else MessageBox.Show("Input normal number");
-                            }
-                        }
-                        if (element is ComboBox comboBox)
-                        {
-                            switch (comboBox.SelectedItem)
-                            {
-                                case "+":
-                                    result += number;
-                                    break;
-                                case "-":
-                                    result -= number;
-                                    break;
-                                case "*":
-                                    result *= number;
-                                    break;
-                                case "/":
-                                    result /= number;
-                                    break;
-                            }
-                        }
+                        number = int.Parse(textBox.Text);
+                    }
+                    catch
+                    {
+                        if (textBox.Text == "") { }
+                        else MessageBox.Show("Input normal number");
+                    }
+                    switch (comboBox.SelectedItem)
+                    {
+                        case "+":
+                            result += number;
+                            break;
+                        case "-":
+                            result -= number;
+                            break;
+                        case "*":
+                            result *= number;
+                            break;
+                        case "/":
+                            result /= number;
+                            break;
                     }
                 }
             }
             lbl.Content = result;
+            result = 0;
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -123,6 +116,20 @@ namespace WpfCalculator
                 }
             }
             Text_Changed(sender, e);
+        }
+        TextBox FindTextBox(StackPanel stackPanel)
+        {
+            foreach (var item in stackPanel.Children)
+                if (item is TextBox)
+                    return item as TextBox;
+            return null;
+        }
+        ComboBox FindComboBox(StackPanel stackPanel)
+        {
+            foreach (var item in stackPanel.Children)
+                if (item is ComboBox)
+                    return item as ComboBox;
+            return null;
         }
     }
 }
